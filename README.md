@@ -1,6 +1,6 @@
-# finTrust
+# NoLoop
 
-finTrust is a full-stack healthcare insurance claims platform built as a final project around one core idea: make medical claim adjudication faster, more explainable, and more transparent for every stakeholder involved.
+NoLoop is a full-stack healthcare insurance claims platform built as a final project around one core idea: make medical claim adjudication faster, more explainable, and more transparent for every stakeholder involved.
 
 The project combines a role-based web experience for patients, hospitals, and insurers with an AI-assisted backend pipeline for OCR, document understanding, policy-grounded review, fraud-risk analysis, and decision support.
 
@@ -8,7 +8,7 @@ The project combines a role-based web experience for patients, hospitals, and in
 
 Medical claims are often delayed by manual document review, incomplete submissions, unclear policy interpretation, and fraud risk. Patients struggle to understand decisions, hospitals face repeated back-and-forth, and insurers need better auditability before approving or rejecting a claim.
 
-finTrust addresses that gap by turning unstructured claim documents into structured review workflows with visible reasoning, role-specific dashboards, and explainable outputs.
+NoLoop addresses that gap by turning unstructured claim documents into structured review workflows with visible reasoning, role-specific dashboards, and explainable outputs.
 
 ## Project Goals
 
@@ -51,7 +51,7 @@ Scaffolded or partially implemented:
 
 ## System Architecture
 
-finTrust is designed as a glass-box adjudication platform:
+NoLoop is designed as a glass-box adjudication platform:
 
 1. Documents are uploaded by the hospital or other stakeholder.
 2. OCR and extraction convert raw files into structured claim data.
@@ -97,7 +97,7 @@ Backend:
 ## Repository Structure
 
 ```text
-finTrust/
+NoLoop/
 |- frontend/          Next.js application, dashboards, pages, components
 |- backend/           FastAPI app, OCR pipeline, agents, services, DB scaffolding
 |- docs/              Architecture, workflow, compliance, and setup notes
@@ -197,7 +197,7 @@ Project documents are available in the `docs/` folder, including:
 
 ## Why This Project Matters
 
-finTrust is not just a UI demo or a single OCR script. It is structured as a healthcare claims platform that can grow into a complete adjudication system with explainable AI support, role-aware operations, and a stronger audit trail for real-world insurance workflows.
+NoLoop is not just a UI demo or a single OCR script. It is structured as a healthcare claims platform that can grow into a complete adjudication system with explainable AI support, role-aware operations, and a stronger audit trail for real-world insurance workflows.
 
 For a final project, it demonstrates:
 
