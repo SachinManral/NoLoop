@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import {
-  Activity,
   ArrowRight,
   Github,
   Globe,
@@ -25,13 +24,13 @@ const testimonialLoop = [...testimonials, ...testimonials, ...testimonials];
 const trustedLoop = [...trustedBy, ...trustedBy, ...trustedBy];
 
 const consoleLines = [
-  "> Intake session initialised for pre-auth package",
-  "> OCR scan complete - 5 documents normalised",
-  "> RAG retrieval matched policy clauses 3.2, 5.2, and 6.4",
-  "> Policy agent finished coverage validation",
-  "> Medical agent finished clinical consistency review",
-  "> Cross-validation agent reconciled invoice, labs, and prescription",
-  "> Decision letter generated and queued for registered patient email",
+  "> Cashless pre-auth opened for discharge-ready patient",
+  "> Query-Proofing Agent found all required reports and bills",
+  "> Policy clauses matched for room rent, implant cover, and co-pay",
+  "> Case Review Agent summarized clinical history for insurer doctor",
+  "> Fraud Detection Agent returned low-risk score with audit reasons",
+  "> Patient WhatsApp update sent with live claim status",
+  "> UPI settlement queued to hospital; patient pays co-pay only",
 ];
 
 const heroContainer: Variants = {
@@ -133,8 +132,6 @@ export default function LandingPage() {
             className="object-cover object-[74%_center] lg:object-[82%_center]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#EEF4FB]/82 via-white/64 to-transparent" />
-          <div className="absolute left-[10%] top-16 h-40 w-40 rounded-full bg-[var(--ch-blue)]/8 blur-xl" />
-          <div className="absolute bottom-10 right-[8%] h-52 w-52 rounded-full bg-sky-200/18 blur-xl" />
         </div>
 
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 lg:flex-row lg:justify-between">
@@ -146,16 +143,16 @@ export default function LandingPage() {
           >
 
             <motion.h1 variants={heroItem} className="mt-6 max-w-[14ch] text-[2.35rem] font-bold leading-[1.04] tracking-[-0.055em] text-slate-900 sm:max-w-[15ch] sm:text-[3rem] lg:max-w-[16ch] lg:text-[4.1rem]">
-              <span className="block">Transparent claims</span>
-              <span className="block text-[var(--ch-blue-dark)]">operations built for</span>
-              <span className="mt-2 block text-slate-800">speed, trust, and explainable decisions</span>
+              <span className="block">One shared record.</span>
+              <span className="block text-[var(--ch-blue-dark)]">One fast claim decision.</span>
+              <span className="mt-2 block text-slate-800">No loop.</span>
             </motion.h1>
 
             <motion.p variants={heroItem} className="mt-7 max-w-[38rem] text-sm leading-7 text-[var(--ch-muted)] sm:text-base sm:leading-8 lg:text-lg">
-              NoLoop is a healthcare claims intelligence platform for intake, review, policy reasoning, fraud controls, explainable decisions, and stakeholder communication across the full claim lifecycle.
+              NoLoop connects patients, hospitals, TPAs, and insurers in one AI-assisted cashless claims platform, so discharge does not get stuck in repeated calls, missing documents, and unclear approvals.
             </motion.p>
             <motion.p variants={heroItem} className="mt-4 text-sm font-medium italic text-[var(--ch-subtle)]">
-              "Built for healthcare claims teams that need automation without losing control or clarity."
+              "File it once. Watch it clear. Let the patient walk out."
             </motion.p>
 
             <motion.div variants={heroItem} className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
@@ -168,7 +165,7 @@ export default function LandingPage() {
               </motion.div>
               <motion.div whileHover={{ y: -1, scale: 1.01 }} whileTap={{ scale: 0.985 }}>
                 <Link href="#how-it-works" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[var(--ch-blue-border)] bg-white/80 px-6 py-3 text-sm font-semibold text-[var(--ch-blue-dark)] shadow-[0_10px_24px_rgba(148,163,184,0.12)] backdrop-blur transition-all hover:bg-white">
-                  See How It Works
+                  See The Workflow
                 </Link>
               </motion.div>
             </motion.div>
@@ -185,7 +182,7 @@ export default function LandingPage() {
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => <Star key={star} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />)}
                 </div>
-                <p className="mt-1 text-xs text-[var(--ch-subtle)]">Designed for insurers, hospitals, TPAs, and patient-facing operations teams</p>
+                <p className="mt-1 text-xs text-[var(--ch-subtle)]">Built for patients, hospitals, TPAs, and insurers working from the same claim record</p>
               </div>
             </motion.div>
           </motion.div>
@@ -198,14 +195,14 @@ export default function LandingPage() {
               animate="show"
             >
               <div className="absolute -right-4 -top-4 hidden rounded-2xl border border-emerald-200 bg-white/90 px-4 py-3 shadow-[0_12px_24px_rgba(15,23,42,0.08)] backdrop-blur md:block">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-600">Workflow synced</p>
-                <p className="mt-1 text-sm font-semibold text-slate-900">Intake, RAG, review, and notification</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-600">Loop removed</p>
+                <p className="mt-1 text-sm font-semibold text-slate-900">Capture, decide, settle</p>
               </div>
               <div className="overflow-hidden rounded-[1.35rem] border border-[#143046] bg-[#07111c]">
                 <div className="flex items-center justify-between border-b border-emerald-500/10 bg-[#0d1825] px-4 py-3.5">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/80">NoLoop live console</p>
-                    <p className="mt-1 text-sm font-semibold text-emerald-100">Operational trace from intake to decision</p>
+                    <p className="mt-1 text-sm font-semibold text-emerald-100">Cashless claim trace from admission to settlement</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
@@ -216,7 +213,7 @@ export default function LandingPage() {
 
                 <div className="border-b border-emerald-500/10 bg-[#091523] px-4 py-3">
                   <div className="flex flex-wrap gap-2">
-                    {['Hospital intake', 'RAG grounding', 'Insurer review', 'Patient update'].map((item) => (
+                    {['Hospital console', 'TPA sync', 'Insurer review', 'WhatsApp update'].map((item) => (
                       <span key={item} className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold text-emerald-300">
                         {item}
                       </span>
@@ -260,7 +257,7 @@ export default function LandingPage() {
       <section className="border-b border-slate-100 bg-white/90 px-4 py-5 backdrop-blur sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-full border border-slate-200/80 bg-slate-50/80 px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] backdrop-blur">
           <div className="flex items-center gap-4 whitespace-nowrap text-sm text-slate-600">
-            <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--ch-subtle)]">Trusted by</span>
+            <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--ch-subtle)]">Built for</span>
             <div className="min-w-0 flex-1 overflow-hidden">
               <motion.div
                 animate={{ x: ['0%', '-33.333%'] }}
@@ -298,8 +295,8 @@ export default function LandingPage() {
         <div className="absolute left-0 top-20 h-48 w-48 rounded-full bg-red-100/40 blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Why Claims Operations Need Reinvention</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">Legacy claims workflows are slow, opaque, and fragmented across stakeholders. Modern teams need a system built for speed, control, and explainability.</p>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">The Cashless Claim Loop Is Broken</h2>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">A medically cleared patient can still wait days because documents, queries, approvals, and status updates move across disconnected systems.</p>
           </Reveal>
           <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-4">
             {problems.map((card, index) => (
@@ -321,8 +318,8 @@ export default function LandingPage() {
       <section className="bg-white px-4 py-24 sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Platform Architecture</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">A modular claims intelligence stack designed to support intake, review, coordination, and explainable decision-making at scale.</p>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Four Agents That Kill The Loop</h2>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">NoLoop uses AI agents where they help most: preventing queries, summarizing cases, detecting fraud, and communicating clearly with patients.</p>
           </Reveal>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {agents.map((agent, index) => (
@@ -344,8 +341,8 @@ export default function LandingPage() {
       <section id="how-it-works" className="bg-[linear-gradient(180deg,#eef4fb_0%,#f8fafc_100%)] px-4 py-24 sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-16 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Workflow Orchestration</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">A connected workflow spanning document intake, evidence grounding, adjudication, escalation, and communication.</p>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Capture, Decide, Settle</h2>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">The claim becomes a shared operating record from hospital submission through insurer review, patient update, and direct settlement.</p>
           </Reveal>
           <div className="grid gap-6 lg:grid-cols-5">
             {steps.map((step, index) => (
@@ -370,8 +367,8 @@ export default function LandingPage() {
       <section className="bg-white px-4 py-24 sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Why Teams Build On NoLoop</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">Designed as a durable operating layer for healthcare claims, not a point solution for one workflow step.</p>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Why The Shared Platform Matters</h2>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">NoLoop is not another isolated hospital portal or insurer dashboard. It is the common layer where every stakeholder sees the same claim.</p>
           </Reveal>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {differentiators.map((item, index) => (
@@ -392,8 +389,8 @@ export default function LandingPage() {
       <section className="bg-[var(--ch-surface)] px-4 py-24 sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Operational Outcomes</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">Performance improvements that matter across insurers, providers, TPAs, and care operations teams.</p>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">What Changes At Discharge</h2>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">The win is simple: fewer avoidable queries, faster insurer review, clearer patient communication, and beds freed sooner.</p>
           </Reveal>
           <div className="grid gap-6 md:grid-cols-3">
             {impacts.map((item, index) => (
@@ -412,8 +409,8 @@ export default function LandingPage() {
       <section className="bg-white px-4 py-24 sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-12 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">What Claims Leaders Are Saying</h2>
-            <p className="mt-4 text-sm leading-7 text-[var(--ch-muted)] md:text-base">Simple, readable feedback from people thinking about claims operations, review quality, and patient communication.</p>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">What Stakeholders Notice First</h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--ch-muted)] md:text-base">Each stakeholder gets a concrete benefit: less waiting, less rework, faster review, and a clearer audit trail.</p>
           </Reveal>
 
           <div className="rounded-[1.7rem] border border-slate-200 bg-slate-50/70 p-3 sm:p-4 lg:p-5">
@@ -446,7 +443,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-3xl">
           <Reveal className="mb-14 text-center">
             <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Frequently Asked Questions</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">The core questions teams ask when evaluating a long-term healthcare operations system.</p>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">The core questions hospitals, insurers, and TPAs ask before adopting a shared claims platform.</p>
           </Reveal>
           <div className="space-y-3">
             {faqs.map((faq, index) => (
@@ -465,14 +462,12 @@ export default function LandingPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[linear-gradient(135deg,#2f6fb2_0%,#4a8edb_100%)] px-4 py-24 text-center sm:px-6 md:px-12">
-        <div className="absolute left-1/2 top-0 h-56 w-56 -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute bottom-0 right-[10%] h-40 w-40 rounded-full bg-sky-200/20 blur-3xl" />
         <Reveal className="mx-auto max-w-2xl">
           <div className="mx-auto mb-6 flex h-[4.25rem] w-[4.25rem] items-center justify-center rounded-3xl bg-[#f7fbff] p-1 backdrop-blur">
             <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
           </div>
-          <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-white md:text-[2.2rem]">Ready to Modernize Claims Operations?</h2>
-          <p className="mt-6 text-base leading-7 text-white/80 md:text-lg">Adopt a unified operating layer for intake, review, explainable AI decisions, fraud controls, and patient-facing communication.</p>
+          <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-white md:text-[2.2rem]">Make The Claim Loop Disappear</h2>
+          <p className="mt-6 text-base leading-7 text-white/80 md:text-lg">Give hospitals, TPAs, insurers, and patients one shared claim record for faster cashless approvals and cleaner settlement.</p>
           <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
             <Link href="/dashboard" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-[var(--ch-blue-dark)] shadow-[0_16px_36px_rgba(15,23,42,0.18)] transition-all hover:-translate-y-px hover:shadow-[0_20px_44px_rgba(255,255,255,0.2)]">
               <Play className="h-4 w-4 fill-current" />
@@ -495,7 +490,7 @@ export default function LandingPage() {
                 </div>
                 <span className="text-lg font-bold text-white">NoLoop</span>
               </div>
-              <p className="mb-6 max-w-[260px] text-sm leading-7 text-slate-400">AI-powered claims orchestration helping Indian health insurers process faster, detect fraud in real-time, and maintain full audit transparency.</p>
+              <p className="mb-6 max-w-[260px] text-sm leading-7 text-slate-400">AI-powered cashless claims orchestration for Indian hospitals, TPAs, insurers, and patients.</p>
               <div className="mb-6 flex gap-3">
                 {[Twitter, Linkedin, Github, Globe].map((Icon, index) => (
                   <a key={index} href="#" className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-slate-400 transition-all hover:bg-slate-700 hover:text-white">
@@ -537,7 +532,7 @@ export default function LandingPage() {
                 <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
               </div>
               <span className="text-sm font-bold text-white">NoLoop</span>
-              <span className="text-xs text-slate-600">- Smart enough to decide. Human enough to explain why.</span>
+              <span className="text-xs text-slate-600">- One shared record. One fast decision. No loop.</span>
             </div>
             <div className="flex flex-wrap items-center gap-5">
               {["Privacy Policy", "Terms of Service", "Security"].map((link) => (
