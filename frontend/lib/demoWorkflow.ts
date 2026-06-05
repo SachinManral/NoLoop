@@ -1,4 +1,4 @@
-﻿import type { AgentResult, AppUser, Claim, ClaimCaseType, ClaimStatus, UploadedDocument, UserRole } from "@/types";
+import type { AgentResult, AppUser, Claim, ClaimCaseType, ClaimStatus, UploadedDocument, UserRole } from "@/types";
 
 export type DemoCaseId = "case-1" | "case-2" | "case-3";
 export type DemoDocSourceId = "policy" | "preAuth" | "prescription" | "report" | "billing";
@@ -57,12 +57,12 @@ export type DemoWorkflowCase = {
   };
 };
 
-export const DEMO_ACTIVE_CASE_KEY = "claimheart.demo.activeCase";
+export const DEMO_ACTIVE_CASE_KEY = "noloop.demo.activeCase";
 
 const demoHospitalUser: AppUser = {
   id: "H-DEMO-001",
   name: "City Care Hospital, Mumbai",
-  email: "citycare.demo@claimheart.ai",
+  email: "citycare.demo@noloop.ai",
   role: "hospital",
   doctorName: "Dr. Rakesh Iyer",
 };
@@ -70,7 +70,7 @@ const demoHospitalUser: AppUser = {
 const demoInsurerUser: AppUser = {
   id: "I-DEMO-001",
   name: "HDFC ERGO General Insurance",
-  email: "insurer.demo@claimheart.ai",
+  email: "insurer.demo@noloop.ai",
   role: "insurer",
 };
 
@@ -124,7 +124,7 @@ export const DEMO_WORKFLOW_CASES: DemoWorkflowCase[] = [
     patient: buildPatient({
       id: "P-DEMO-001",
       name: "Riya Sharma",
-      email: "riya.demo@claimheart.ai",
+      email: "riya.demo@noloop.ai",
       dob: "1995-03-14",
       policyNumber: "HDFC-ERGO-2025-784512",
       insuranceCompany: "HDFC ERGO",
@@ -159,7 +159,7 @@ export const DEMO_WORKFLOW_CASES: DemoWorkflowCase[] = [
     finalDecisionLabel: "Denied - Waiting period active",
     decisionNote: "General hospitalisation waiting period under Clause 3.2 remains incomplete for this policy.",
     decisionLetter:
-      "Dear Riya Sharma,\n\nYour cashless pre-authorisation request for Acute Febrile Illness at City Care Hospital, Mumbai has been declined.\n\nReason for decision:\nThe policy HDFC-ERGO-2025-784512 started on 25 January 2025. Under Clause 3.2 of the Smart Health Plus plan, non-accidental general hospitalisation claims are covered only after 24 continuous months. The requested admission on 02 April 2026 falls within that waiting period.\n\nThis decision is based on:\n- Clause 3.2 - 24-month waiting period for general hospitalisation\n- Section 6.4 - Automatic pre-auth rejection when waiting period applies\n\nNo further clinical discrepancy was observed in the hospital submission. You may appeal within 30 days by sharing additional policy continuity evidence if available.\n\nRegards,\nClaimHeart Adjudication Desk",
+      "Dear Riya Sharma,\n\nYour cashless pre-authorisation request for Acute Febrile Illness at City Care Hospital, Mumbai has been declined.\n\nReason for decision:\nThe policy HDFC-ERGO-2025-784512 started on 25 January 2025. Under Clause 3.2 of the Smart Health Plus plan, non-accidental general hospitalisation claims are covered only after 24 continuous months. The requested admission on 02 April 2026 falls within that waiting period.\n\nThis decision is based on:\n- Clause 3.2 - 24-month waiting period for general hospitalisation\n- Section 6.4 - Automatic pre-auth rejection when waiting period applies\n\nNo further clinical discrepancy was observed in the hospital submission. You may appeal within 30 days by sharing additional policy continuity evidence if available.\n\nRegards,\nNoLoop Adjudication Desk",
     agentResults: {
       policy: {
         status: "flag",
@@ -195,7 +195,7 @@ export const DEMO_WORKFLOW_CASES: DemoWorkflowCase[] = [
     patient: buildPatient({
       id: "P-DEMO-002",
       name: "Arjun Mehta",
-      email: "arjun.demo@claimheart.ai",
+      email: "arjun.demo@noloop.ai",
       dob: "1993-07-22",
       policyNumber: "HDFC-ERGO-2025-991203",
       insuranceCompany: "HDFC ERGO",
@@ -232,7 +232,7 @@ export const DEMO_WORKFLOW_CASES: DemoWorkflowCase[] = [
     finalDecisionLabel: "Manual review - billing anomaly",
     decisionNote: "Billing shows three PlateMax IV administrations in one day, exceeding the permitted protocol limit of two.",
     decisionLetter:
-      "Dear Arjun Mehta,\n\nYour dengue cashless claim for INR 22,150 has been placed under manual review.\n\nWhy we paused settlement:\nDuring automated adjudication, the submitted billing invoice showed three PlateMax IV administrations on 05 April 2026. Under Section 5.2 of the policy, platelet-supportive injectable agents are covered for a maximum of two administrations within 24 hours unless additional clinical justification is documented.\n\nCurrent status:\n- Policy eligibility: Passed\n- Medical record consistency: Requires clarification\n- Final settlement: On hold pending hospital response\n\nThe hospital has been asked to submit nursing administration records and any physician addendum supporting the third dose. Once received, the claim will be re-evaluated.\n\nRegards,\nClaimHeart Adjudication Desk",
+      "Dear Arjun Mehta,\n\nYour dengue cashless claim for INR 22,150 has been placed under manual review.\n\nWhy we paused settlement:\nDuring automated adjudication, the submitted billing invoice showed three PlateMax IV administrations on 05 April 2026. Under Section 5.2 of the policy, platelet-supportive injectable agents are covered for a maximum of two administrations within 24 hours unless additional clinical justification is documented.\n\nCurrent status:\n- Policy eligibility: Passed\n- Medical record consistency: Requires clarification\n- Final settlement: On hold pending hospital response\n\nThe hospital has been asked to submit nursing administration records and any physician addendum supporting the third dose. Once received, the claim will be re-evaluated.\n\nRegards,\nNoLoop Adjudication Desk",
     agentResults: {
       policy: {
         status: "pass",
@@ -269,7 +269,7 @@ export const DEMO_WORKFLOW_CASES: DemoWorkflowCase[] = [
     patient: buildPatient({
       id: "P-DEMO-002",
       name: "Arjun Mehta",
-      email: "arjun.demo@claimheart.ai",
+      email: "arjun.demo@noloop.ai",
       dob: "1993-07-22",
       policyNumber: "HDFC-ERGO-2025-991203",
       insuranceCompany: "HDFC ERGO",
@@ -306,7 +306,7 @@ export const DEMO_WORKFLOW_CASES: DemoWorkflowCase[] = [
     finalDecisionLabel: "Approved - full amount payable",
     decisionNote: "All three documents align with policy rules and dosing protocol; full claim cleared.",
     decisionLetter:
-      "Dear Arjun Mehta,\n\nYour dengue cashless claim has been approved in full.\n\nApproved amount: INR 17,740\nHospital: City Care Hospital, Mumbai\nDecision basis: Policy coverage is active, the diagnosis is supported by laboratory confirmation, and the final invoice reflects two PlateMax IV administrations within the allowable protocol limit.\n\nAutomated checks completed successfully across:\n- Policy eligibility\n- Medical necessity and lab confirmation\n- Prescription-to-billing consistency\n\nNo further action is needed from your side. Settlement instructions have been released to the hospital.\n\nRegards,\nClaimHeart Adjudication Desk",
+      "Dear Arjun Mehta,\n\nYour dengue cashless claim has been approved in full.\n\nApproved amount: INR 17,740\nHospital: City Care Hospital, Mumbai\nDecision basis: Policy coverage is active, the diagnosis is supported by laboratory confirmation, and the final invoice reflects two PlateMax IV administrations within the allowable protocol limit.\n\nAutomated checks completed successfully across:\n- Policy eligibility\n- Medical necessity and lab confirmation\n- Prescription-to-billing consistency\n\nNo further action is needed from your side. Settlement instructions have been released to the hospital.\n\nRegards,\nNoLoop Adjudication Desk",
     agentResults: {
       policy: {
         status: "pass",

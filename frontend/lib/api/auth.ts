@@ -1,21 +1,33 @@
 "use client";
 
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  updateProfile,
-  type User as FirebaseUser,
-} from "firebase/auth";
-import { readUserProfileFromStore, writeUserProfileToStore } from "@/lib/api/authProfileStore";
+import { getDemoUserForRole } from "@/lib/demoWorkflow";
 import { readStorage, writeStorage } from "@/lib/api/storage";
-import { firebaseAuth, googleAuthProvider, hasPlaceholderFirebaseConfig } from "@/lib/firebase";
 import type { AppUser, UserRole } from "@/types";
 
-const CURRENT_USER_KEY = "claimheart.currentUser";
-const ROLE_KEY = "claimheart.role";
+const CURRENT_USER_KEY = "noloop.currentUser";
+const ROLE_KEY = "noloop.role";
+const LOCAL_USERS_KEY = "noloop.demo.users";
+const SESSION_EVENT = "noloop-auth-change";
+
+export const DEMO_PASSWORD = "demo1234";
+
+export const DEMO_CREDENTIALS: Record<UserRole, { email: string; password: string; user: AppUser }> = {
+  patient: {
+    email: "arjun.demo@noloop.ai",
+    password: DEMO_PASSWORD,
+    user: getDemoUserForRole("patient"),
+  },
+  hospital: {
+    email: "citycare.demo@noloop.ai",
+    password: DEMO_PASSWORD,
+    user: getDemoUserForRole("hospital"),
+  },
+  insurer: {
+    email: "insurer.demo@noloop.ai",
+    password: DEMO_PASSWORD,
+    user: getDemoUserForRole("insurer"),
+  },
+};
 
 export type SignupPayload = {
   name: string;
@@ -47,17 +59,9 @@ export type SignupPayload = {
 };
 
 type SocialSignupPayload = Omit<SignupPayload, "password">;
-
-const AUTH_ERROR_MESSAGES: Record<string, string> = {
-  "auth/email-already-in-use": "An account with this email already exists.",
-  "auth/invalid-credential": "Incorrect email or password.",
-  "auth/invalid-email": "Enter a valid email address.",
-  "auth/popup-closed-by-user": "The Google sign-in popup was closed before the request finished.",
-  "auth/popup-blocked": "Your browser blocked the Google sign-in popup. Allow popups and try again.",
-  "auth/too-many-requests": "Too many attempts were made. Please wait a moment and try again.",
-  "auth/unauthorized-domain": "This domain is not authorized for Firebase Auth yet.",
-  "auth/user-not-found": "No account was found for these credentials.",
-  "auth/weak-password": "Password should be at least 6 characters long.",
+type StoredUserRecord = {
+  user: AppUser;
+  password: string;
 };
 
 const toOptionalString = (value?: string | null) => {
@@ -66,24 +70,20 @@ const toOptionalString = (value?: string | null) => {
 };
 
 const toOptionalNumber = (value?: number) => (typeof value === "number" && Number.isFinite(value) ? value : undefined);
-
+const normalizeEmail = (email: string) => email.trim().toLowerCase();
 const deriveRoleId = (role: UserRole, uid: string) => `${role[0].toUpperCase()}-${uid.slice(0, 8).toUpperCase()}`;
 
 const deriveDisplayName = (email: string, name?: string | null) => {
   const trimmedName = name?.trim();
-  if (trimmedName) {
-    return trimmedName;
-  }
-
-  return email.split("@")[0] || "ClaimHeart User";
+  return trimmedName || email.split("@")[0] || "NoLoop User";
 };
 
-const normalizeEmail = (email: string) => email.trim().toLowerCase();
-
-const ensureFirebaseConfigured = () => {
-  if (hasPlaceholderFirebaseConfig) {
-    throw new Error("Update the NEXT_PUBLIC_FIREBASE_* values in your frontend .env.local before using live authentication.");
+const dispatchSessionChange = () => {
+  if (typeof window === "undefined") {
+    return;
   }
+
+  window.dispatchEvent(new Event(SESSION_EVENT));
 };
 
 const cacheCurrentUser = (user: AppUser | null) => {
@@ -96,6 +96,7 @@ const cacheCurrentUser = (user: AppUser | null) => {
     window.localStorage.removeItem("role");
     window.localStorage.removeItem(CURRENT_USER_KEY);
     window.localStorage.removeItem(ROLE_KEY);
+    dispatchSessionChange();
     return;
   }
 
@@ -103,7 +104,13 @@ const cacheCurrentUser = (user: AppUser | null) => {
   writeStorage(ROLE_KEY, user.role);
   window.localStorage.setItem("role", user.role);
   window.localStorage.setItem("user", JSON.stringify(user));
+  dispatchSessionChange();
 };
+
+const readStoredUsers = () => readStorage<StoredUserRecord[]>(LOCAL_USERS_KEY, []);
+const writeStoredUsers = (records: StoredUserRecord[]) => writeStorage(LOCAL_USERS_KEY, records);
+
+const getDemoCredentialForRole = (role: UserRole) => DEMO_CREDENTIALS[role];
 
 const buildUserProfile = ({
   uid,
@@ -168,67 +175,13 @@ const buildUserProfile = ({
   policyDocumentName: toOptionalString(policyDocumentName),
 }) satisfies AppUser;
 
-const readUserProfile = async (uid: string) => {
-  return readUserProfileFromStore(uid, deriveRoleId, normalizeEmail, deriveDisplayName);
-};
-
-const writeUserProfile = async (profile: AppUser) => {
-  await writeUserProfileToStore(profile);
-};
-
-const persistUserProfile = (firebaseUser: FirebaseUser, profile: AppUser) => {
-  cacheCurrentUser(profile);
-
-  void Promise.allSettled([
-    updateProfile(firebaseUser, { displayName: profile.name }),
-    writeUserProfile(profile),
-  ]).then((results) => {
-    const rejected = results.find((result) => result.status === "rejected");
-    if (rejected?.status === "rejected") {
-      console.error("ClaimHeart auth profile persistence failed.", rejected.reason);
-    }
-  });
-};
-
-const syncUserFromFirebase = async (firebaseUser: FirebaseUser) => {
-  const cachedUser = readStorage<AppUser | null>(CURRENT_USER_KEY, null);
-  if (cachedUser?.uid === firebaseUser.uid) {
-    cacheCurrentUser(cachedUser);
-    return cachedUser;
-  }
-
-  const profile = await readUserProfile(firebaseUser.uid);
-  if (profile) {
-    cacheCurrentUser(profile);
-    return profile;
-  }
-
-  cacheCurrentUser(null);
-  return null;
-};
-
-const enforceRole = async (user: AppUser | null, role: UserRole) => {
-  if (!user) {
-    await signOut(firebaseAuth);
-    throw new Error("This account does not have a ClaimHeart workspace profile yet. Please sign up first.");
-  }
-
+const enforceRole = (user: AppUser, role: UserRole) => {
   if (user.role !== role) {
-    await signOut(firebaseAuth);
     throw new Error(`This account is registered for the ${user.role} workspace. Please sign in there instead.`);
   }
 
   cacheCurrentUser(user);
   return user;
-};
-
-const formatAuthError = (error: unknown, fallback: string) => {
-  if (error instanceof Error) {
-    const knownMessage = AUTH_ERROR_MESSAGES[(error as Error & { code?: string }).code ?? ""];
-    return knownMessage ?? error.message ?? fallback;
-  }
-
-  return fallback;
 };
 
 export const getCurrentUser = async (): Promise<AppUser | null> => {
@@ -257,95 +210,68 @@ export const getDashboardPath = (role: UserRole | null) => {
 };
 
 export const loginUser = async (email: string, password: string, role: UserRole) => {
-  ensureFirebaseConfigured();
+  const normalizedEmail = normalizeEmail(email);
+  const demo = getDemoCredentialForRole(role);
 
-  try {
-    const credential = await signInWithEmailAndPassword(firebaseAuth, normalizeEmail(email), password);
-    const profile = await syncUserFromFirebase(credential.user);
-    return await enforceRole(profile, role);
-  } catch (error) {
-    throw new Error(formatAuthError(error, "Unable to sign in right now."));
+  if (normalizedEmail === demo.email && password === demo.password) {
+    return enforceRole(demo.user, role);
   }
-};
 
-export const loginWithGoogle = async (role: UserRole) => {
-  ensureFirebaseConfigured();
-
-  try {
-    const result = await signInWithPopup(firebaseAuth, googleAuthProvider);
-    const profile = await readUserProfile(result.user.uid);
-    return await enforceRole(profile, role);
-  } catch (error) {
-    throw new Error(formatAuthError(error, "Unable to sign in with Google right now."));
+  const storedRecord = readStoredUsers().find((record) => record.user.email === normalizedEmail);
+  if (storedRecord && storedRecord.password === password) {
+    return enforceRole(storedRecord.user, role);
   }
+
+  throw new Error("Use the demo credentials shown for the selected workspace.");
 };
 
 export const signupUser = async (payload: SignupPayload) => {
-  ensureFirebaseConfigured();
-
   const normalizedEmail = normalizeEmail(payload.email);
+  const demoEmailTaken = Object.values(DEMO_CREDENTIALS).some((credential) => credential.email === normalizedEmail);
+  const storedUsers = readStoredUsers();
 
-  try {
-    const credential = await createUserWithEmailAndPassword(firebaseAuth, normalizedEmail, payload.password);
-    const profile = buildUserProfile({
-      ...payload,
-      uid: credential.user.uid,
-      email: normalizedEmail,
-      authProvider: "password",
-    });
-
-    persistUserProfile(credential.user, profile);
-    return profile;
-  } catch (error) {
-    throw new Error(formatAuthError(error, "Unable to create the account right now."));
+  if (demoEmailTaken || storedUsers.some((record) => record.user.email === normalizedEmail)) {
+    throw new Error("An account with this email already exists in this demo.");
   }
-};
 
-export const signupWithGoogle = async (payload: SocialSignupPayload) => {
-  ensureFirebaseConfigured();
-
-  try {
-    const result = await signInWithPopup(firebaseAuth, googleAuthProvider);
-    const normalizedEmail = normalizeEmail(result.user.email ?? payload.email);
-    const existingProfile = await readUserProfile(result.user.uid);
-
-    if (existingProfile) {
-      cacheCurrentUser(existingProfile);
-      return existingProfile;
-    }
-
-    const profile = buildUserProfile({
-      ...payload,
-      uid: result.user.uid,
-      email: normalizedEmail,
-      name: payload.name || result.user.displayName || normalizedEmail.split("@")[0],
-      phone: payload.phone || result.user.phoneNumber || undefined,
-      authProvider: "google",
-    });
-
-    persistUserProfile(result.user, profile);
-    return profile;
-  } catch (error) {
-    throw new Error(formatAuthError(error, "Unable to create the account with Google right now."));
-  }
-};
-
-export const subscribeToAuthState = (listener: (user: AppUser | null) => void) =>
-  onAuthStateChanged(firebaseAuth, async (firebaseUser) => {
-    if (!firebaseUser) {
-      cacheCurrentUser(null);
-      listener(null);
-      return;
-    }
-
-    try {
-      const profile = await syncUserFromFirebase(firebaseUser);
-      listener(profile);
-    } catch {
-      cacheCurrentUser(null);
-      listener(null);
-    }
+  const uid = `demo-${payload.role}-${Date.now().toString(36)}`;
+  const profile = buildUserProfile({
+    ...payload,
+    uid,
+    email: normalizedEmail,
+    authProvider: "password",
   });
+
+  writeStoredUsers([...storedUsers, { user: profile, password: payload.password }]);
+  cacheCurrentUser(profile);
+  return profile;
+};
+
+export const subscribeToAuthState = (listener: (user: AppUser | null) => void) => {
+  if (typeof window === "undefined") {
+    listener(null);
+    return () => {};
+  }
+
+  const emitCurrentUser = () => {
+    listener(readStorage<AppUser | null>(CURRENT_USER_KEY, null));
+  };
+
+  const handleStorage = (event: StorageEvent) => {
+    if (!event.key || event.key === CURRENT_USER_KEY || event.key === ROLE_KEY || event.key === "user" || event.key === "role") {
+      emitCurrentUser();
+    }
+  };
+
+  window.addEventListener(SESSION_EVENT, emitCurrentUser);
+  window.addEventListener("storage", handleStorage);
+  window.setTimeout(emitCurrentUser, 0);
+
+  return () => {
+    window.removeEventListener(SESSION_EVENT, emitCurrentUser);
+    window.removeEventListener("storage", handleStorage);
+  };
+};
 
 export const logout = async (withConfirmation: boolean = true) => {
   if (typeof window === "undefined") {
@@ -356,10 +282,6 @@ export const logout = async (withConfirmation: boolean = true) => {
     return;
   }
 
-  try {
-    await signOut(firebaseAuth);
-  } finally {
-    cacheCurrentUser(null);
-    window.location.href = "/auth/login";
-  }
+  cacheCurrentUser(null);
+  window.location.href = "/auth/login";
 };

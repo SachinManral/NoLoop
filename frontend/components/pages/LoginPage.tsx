@@ -5,14 +5,13 @@ import Link from "next/link";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
+  DEMO_CREDENTIALS,
   getDashboardPath,
   loginUser,
-  loginWithGoogle,
 } from "@/lib/api/auth";
-import AuthProviderButtons, { AUTH_PROVIDER_LABELS, type AuthProvider } from "@/components/pages/AuthProviderButtons";
 import AuthShowcase from "@/components/pages/AuthShowcase";
 import { AUTH_ROLE_META } from "@/components/pages/authMeta";
-import ClaimHeartLogo from "@/components/ui/ClaimHeartLogo";
+import NoLoopLogo from "@/components/ui/NoLoopLogo";
 import type { UserRole } from "@/types";
 import { toast } from "sonner";
 
@@ -23,37 +22,26 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
   useEffect(() => {
     router.prefetch(getDashboardPath(role));
   }, [role, router]);
 
-  const handleSocialLogin = async (provider: AuthProvider) => {
-    if (provider !== "google") {
-      toast.info(`${AUTH_PROVIDER_LABELS[provider]} sign-in is not wired in this build yet.`);
-      return;
+  useEffect(() => {
+    const requestedRole = new URLSearchParams(window.location.search).get("role");
+    if (requestedRole === "patient" || requestedRole === "hospital" || requestedRole === "insurer") {
+      setRole(requestedRole);
     }
-
-    if (isGoogleSubmitting || isSubmitting) {
-      return;
-    }
-
-    setIsGoogleSubmitting(true);
-
-    try {
-      const user = await loginWithGoogle(role);
-      toast.success(`Welcome back to the ${AUTH_ROLE_META[user.role].label.toLowerCase()} workspace.`);
-      router.push(getDashboardPath(user.role));
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to sign in with Google right now.");
-    } finally {
-      setIsGoogleSubmitting(false);
-    }
-  };
+  }, []);
 
   const handleRole = (nextRole: UserRole) => {
     setRole(nextRole);
+  };
+
+  const applyDemoCredentials = () => {
+    const credential = DEMO_CREDENTIALS[role];
+    setEmail(credential.email);
+    setPassword(credential.password);
   };
 
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
@@ -85,28 +73,29 @@ export default function LoginPage() {
             <div className="mx-auto flex w-full max-w-lg flex-col py-1 sm:py-3 xl:justify-start">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--ch-blue-border)] bg-[var(--ch-blue-light)] p-1">
-                  <ClaimHeartLogo className="h-full w-full" imageClassName="scale-110" />
+                  <NoLoopLogo className="h-full w-full" imageClassName="scale-110" />
                 </div>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ch-blue-dark)]">Sign in to your account to continue your journey</p>
-                  <h2 className="text-[1.8rem] font-bold tracking-[-0.05em] text-slate-900 sm:text-[2rem]">Welcome back to ClaimHeart!</h2>
+                  <h2 className="text-[1.8rem] font-bold tracking-[-0.05em] text-slate-900 sm:text-[2rem]">Welcome back to NoLoop!</h2>
                 </div>
               </div>
 
               <div className="mt-4 rounded-[1.6rem] border border-slate-200/80 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-4 shadow-[0_14px_34px_rgba(15,23,42,0.06)] sm:p-5">
                 <div className="rounded-[1.2rem] border border-slate-200 bg-white p-3.5">
-                  <AuthProviderButtons
-                    mode="login"
-                    onSelect={(provider) => {
-                      void handleSocialLogin(provider);
-                    }}
-                    providers={["google"]}
-                    variant="full"
-                  />
-                  <div className="mt-3 flex items-center gap-3">
-                    <div className="h-px flex-1 bg-slate-200" />
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">or continue with email</span>
-                    <div className="h-px flex-1 bg-slate-200" />
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--ch-subtle)]">Demo credentials</p>
+                      <p className="mt-1 text-sm font-semibold text-slate-900">{DEMO_CREDENTIALS[role].email}</p>
+                      <p className="mt-1 text-xs text-slate-500">Password: {DEMO_CREDENTIALS[role].password}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={applyDemoCredentials}
+                      className="inline-flex h-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition-all hover:bg-slate-50"
+                    >
+                      Use demo
+                    </button>
                   </div>
                 </div>
 
@@ -142,9 +131,7 @@ export default function LoginPage() {
                   <div className="rounded-[1.2rem] border border-slate-200 bg-slate-50 px-4 py-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--ch-subtle)]">Workspace check</p>
                     <p className="mt-1 text-sm font-semibold text-slate-900">{AUTH_ROLE_META[role].label}</p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
-                      Sign in with the workspace you registered for. ClaimHeart uses that role to route you to the correct dashboard and review tools.
-                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">Use the demo credential for this role, or a local account created from signup.</p>
                   </div>
 
                   <div>
@@ -154,7 +141,7 @@ export default function LoginPage() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className="mt-1.5 h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none transition-all focus:border-[var(--ch-blue)] focus:shadow-[0_0_0_4px_rgba(74,142,219,0.12)]"
-                      placeholder="name@claimheart.ai"
+                      placeholder="name@noloop.ai"
                       autoComplete="email"
                     />
                   </div>
@@ -184,7 +171,7 @@ export default function LoginPage() {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting || isGoogleSubmitting}
+                    disabled={isSubmitting}
                     className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-[var(--ch-blue)] px-4 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(74,142,219,0.18)] transition-all hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-55"
                   >
                     {isSubmitting ? "Signing in..." : "Sign in"}

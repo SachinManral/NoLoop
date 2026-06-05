@@ -1,4 +1,4 @@
-// ─── ClaimHeart Mock Data ─────────────────────────────────────────────────────
+// ─── NoLoop Mock Data ─────────────────────────────────────────────────────
 
 export const kpiData = {
   claimsProcessed: 1247,

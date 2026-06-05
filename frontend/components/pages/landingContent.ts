@@ -1,4 +1,4 @@
-﻿import {
+import {
   Activity,
   AlertTriangle,
   BarChart2,
@@ -96,7 +96,7 @@ export const agents = [
 
 export const steps = [
   { step: "01", title: "Hospital Upload", desc: "The hospital uploads pre-auth, prescription, lab, policy, and billing documents into the intake pack.", icon: FileText },
-  { step: "02", title: "Intake Scan", desc: "ClaimHeart runs staged OCR, extraction, and packaging so the workflow looks and behaves like a live intake pipeline.", icon: Workflow },
+  { step: "02", title: "Intake Scan", desc: "NoLoop runs staged OCR, extraction, and packaging so the workflow looks and behaves like a live intake pipeline.", icon: Workflow },
   { step: "03", title: "RAG Grounding", desc: "Relevant policy clauses and treatment evidence are retrieved before insurer review begins.", icon: Search },
   { step: "04", title: "Sequential Review", desc: "Policy, medical, and cross-validation agents execute one after another with visible audit signals.", icon: Shield },
   { step: "05", title: "Decision + Update", desc: "A final decision letter is generated, synced to dashboards, and queued for patient communication.", icon: CheckCircle2 },
@@ -143,7 +143,7 @@ export const testimonials = [
     name: "Sachin Manral",
     role: "Claims Strategy Lead",
     company: "Healthcare Claims Operations",
-    text: "ClaimHeart brings structure to every stage of the claim journey. What stood out most was how clearly the platform connects intake, review, and decision visibility in one system.",
+    text: "NoLoop brings structure to every stage of the claim journey. What stood out most was how clearly the platform connects intake, review, and decision visibility in one system.",
     avatar: "SM",
     avatarBg: "bg-[var(--ch-blue)]",
   },
@@ -151,7 +151,7 @@ export const testimonials = [
     name: "Sandeep Parjapati",
     role: "Insurance Workflow Manager",
     company: "Digital Adjudication Team",
-    text: "The workflow feels operationally mature. Instead of isolated tools, ClaimHeart gives teams a dependable layer for evidence review, coordination, and explainable decision support.",
+    text: "The workflow feels operationally mature. Instead of isolated tools, NoLoop gives teams a dependable layer for evidence review, coordination, and explainable decision support.",
     avatar: "SP",
     avatarBg: "bg-green-500",
   },
@@ -159,7 +159,7 @@ export const testimonials = [
     name: "Vaibhav Yadav",
     role: "Head of Claims Transformation",
     company: "Payer Innovation Office",
-    text: "What makes ClaimHeart compelling is the balance between automation and control. Teams move faster without losing auditability, oversight, or confidence in the final outcome.",
+    text: "What makes NoLoop compelling is the balance between automation and control. Teams move faster without losing auditability, oversight, or confidence in the final outcome.",
     avatar: "VY",
     avatarBg: "bg-amber-500",
   },
@@ -167,7 +167,7 @@ export const testimonials = [
     name: "Simran Kukreja",
     role: "Patient Experience Architect",
     company: "Care Operations Program",
-    text: "Most platforms stop at internal processing. ClaimHeart stands out because it extends the experience through patient-facing clarity, communication, and a much more transparent decision trail.",
+    text: "Most platforms stop at internal processing. NoLoop stands out because it extends the experience through patient-facing clarity, communication, and a much more transparent decision trail.",
     avatar: "UG",
     avatarBg: "bg-rose-500",
   },
@@ -175,7 +175,7 @@ export const testimonials = [
     name: "Vyakhya Namdev",
     role: "Platform Design Reviewer",
     company: "Claims Intelligence Practice",
-    text: "ClaimHeart feels like a long-term product, not a point demo. The architecture, presentation, and workflow logic all suggest a platform designed to keep evolving without losing coherence.",
+    text: "NoLoop feels like a long-term product, not a point demo. The architecture, presentation, and workflow logic all suggest a platform designed to keep evolving without losing coherence.",
     avatar: "VN",
     avatarBg: "bg-violet-500",
   },
@@ -221,10 +221,10 @@ export const pricingPlans = [
 export const faqs = [
   {
     q: "How accurate is the fraud detection?",
-    a: "ClaimHeart combines structured rules, anomaly signals, and reasoning layers to help teams identify high-risk claims early while preserving reviewer oversight.",
+    a: "NoLoop combines structured rules, anomaly signals, and reasoning layers to help teams identify high-risk claims early while preserving reviewer oversight.",
   },
   {
-    q: "Is patient data safe with ClaimHeart?",
+    q: "Is patient data safe with NoLoop?",
     a: "All data is encrypted at rest and in transit, with strict access controls and enterprise-grade auditability across every workflow.",
   },
   {
@@ -232,8 +232,8 @@ export const faqs = [
     a: "Most teams go live in under 2 weeks with guided onboarding, policy setup, and reviewer training.",
   },
   {
-    q: "Does ClaimHeart replace human adjusters?",
-    a: "No - and by design. ClaimHeart recommends; humans decide. Complex or sensitive claims always escalate to a human reviewer.",
+    q: "Does NoLoop replace human adjusters?",
+    a: "No - and by design. NoLoop recommends; humans decide. Complex or sensitive claims always escalate to a human reviewer.",
   },
   {
     q: "What document formats are supported?",

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
-import ClaimHeartLogo from "@/components/ui/ClaimHeartLogo";
+import NoLoopLogo from "@/components/ui/NoLoopLogo";
 import { agents, differentiators, faqs, footerLinks, impacts, problems, stats, steps, testimonials, trustedBy } from "@/components/pages/landingContent";
 
 const testimonialLoop = [...testimonials, ...testimonials, ...testimonials];
@@ -127,7 +127,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 -z-10">
           <Image
             src="/assets/bg.jpg"
-            alt="ClaimHeart healthcare claims background"
+            alt="NoLoop healthcare claims background"
             fill
             priority
             className="object-cover object-[74%_center] lg:object-[82%_center]"
@@ -144,10 +144,6 @@ export default function LandingPage() {
             initial="hidden"
             animate="show"
           >
-            <motion.div variants={heroItem} className="inline-flex items-center gap-2 rounded-full border border-[var(--ch-blue-border)] bg-white/80 px-4 py-2 text-[11px] font-semibold text-[var(--ch-blue-dark)] shadow-[0_12px_30px_rgba(74,142,219,0.08)] backdrop-blur">
-              <Activity className="h-3.5 w-3.5 text-[var(--ch-blue)]" />
-              Intelligent Operating System For Healthcare Claims
-            </motion.div>
 
             <motion.h1 variants={heroItem} className="mt-6 max-w-[14ch] text-[2.35rem] font-bold leading-[1.04] tracking-[-0.055em] text-slate-900 sm:max-w-[15ch] sm:text-[3rem] lg:max-w-[16ch] lg:text-[4.1rem]">
               <span className="block">Transparent claims</span>
@@ -156,7 +152,7 @@ export default function LandingPage() {
             </motion.h1>
 
             <motion.p variants={heroItem} className="mt-7 max-w-[38rem] text-sm leading-7 text-[var(--ch-muted)] sm:text-base sm:leading-8 lg:text-lg">
-              ClaimHeart is a healthcare claims intelligence platform for intake, review, policy reasoning, fraud controls, explainable decisions, and stakeholder communication across the full claim lifecycle.
+              NoLoop is a healthcare claims intelligence platform for intake, review, policy reasoning, fraud controls, explainable decisions, and stakeholder communication across the full claim lifecycle.
             </motion.p>
             <motion.p variants={heroItem} className="mt-4 text-sm font-medium italic text-[var(--ch-subtle)]">
               "Built for healthcare claims teams that need automation without losing control or clarity."
@@ -208,7 +204,7 @@ export default function LandingPage() {
               <div className="overflow-hidden rounded-[1.35rem] border border-[#143046] bg-[#07111c]">
                 <div className="flex items-center justify-between border-b border-emerald-500/10 bg-[#0d1825] px-4 py-3.5">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/80">ClaimHeart live console</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/80">NoLoop live console</p>
                     <p className="mt-1 text-sm font-semibold text-emerald-100">Operational trace from intake to decision</p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -374,7 +370,7 @@ export default function LandingPage() {
       <section className="bg-white px-4 py-24 sm:px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <Reveal className="mx-auto mb-14 max-w-3xl text-center">
-            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Why Teams Build On ClaimHeart</h2>
+            <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Why Teams Build On NoLoop</h2>
             <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">Designed as a durable operating layer for healthcare claims, not a point solution for one workflow step.</p>
           </Reveal>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -450,7 +446,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-3xl">
           <Reveal className="mb-14 text-center">
             <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-slate-900 md:text-[2.2rem]">Frequently Asked Questions</h2>
-            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">The core questions teams ask when evaluating a long-term healthcare claims platform.</p>
+            <p className="mt-5 text-base leading-8 text-[var(--ch-muted)] md:text-lg">The core questions teams ask when evaluating a long-term healthcare operations system.</p>
           </Reveal>
           <div className="space-y-3">
             {faqs.map((faq, index) => (
@@ -473,7 +469,7 @@ export default function LandingPage() {
         <div className="absolute bottom-0 right-[10%] h-40 w-40 rounded-full bg-sky-200/20 blur-3xl" />
         <Reveal className="mx-auto max-w-2xl">
           <div className="mx-auto mb-6 flex h-[4.25rem] w-[4.25rem] items-center justify-center rounded-3xl bg-[#f7fbff] p-1 backdrop-blur">
-            <ClaimHeartLogo className="h-full w-full" imageClassName="scale-105" />
+            <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
           </div>
           <h2 className="text-[2rem] font-bold tracking-[-0.03em] text-white md:text-[2.2rem]">Ready to Modernize Claims Operations?</h2>
           <p className="mt-6 text-base leading-7 text-white/80 md:text-lg">Adopt a unified operating layer for intake, review, explainable AI decisions, fraud controls, and patient-facing communication.</p>
@@ -495,9 +491,9 @@ export default function LandingPage() {
             <div className="lg:col-span-2">
               <div className="mb-4 flex items-center gap-2.5">
                 <div className="flex h-[2.375rem] w-[2.375rem] items-center justify-center rounded-xl bg-[#f7fbff] p-0.5">
-                  <ClaimHeartLogo className="h-full w-full" imageClassName="scale-105" />
+                  <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
                 </div>
-                <span className="text-lg font-bold text-white">ClaimHeart</span>
+                <span className="text-lg font-bold text-white">NoLoop</span>
               </div>
               <p className="mb-6 max-w-[260px] text-sm leading-7 text-slate-400">AI-powered claims orchestration helping Indian health insurers process faster, detect fraud in real-time, and maintain full audit transparency.</p>
               <div className="mb-6 flex gap-3">
@@ -509,7 +505,7 @@ export default function LandingPage() {
               </div>
               <div className="space-y-2">
                 {[
-                  { Icon: Mail, text: "hello@claimheart.in" },
+                  { Icon: Mail, text: "hello@noloop.in" },
                   { Icon: PhoneCall, text: "+91 80 4567 8900" },
                   { Icon: MapPin, text: "Bengaluru, Karnataka" },
                 ].map(({ Icon, text }) => (
@@ -538,16 +534,16 @@ export default function LandingPage() {
           <div className="flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
             <div className="flex items-center gap-2">
               <div className="flex h-[1.375rem] w-[1.375rem] items-center justify-center rounded-md bg-[#f7fbff] p-0">
-                <ClaimHeartLogo className="h-full w-full" imageClassName="scale-105" />
+                <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
               </div>
-              <span className="text-sm font-bold text-white">ClaimHeart</span>
+              <span className="text-sm font-bold text-white">NoLoop</span>
               <span className="text-xs text-slate-600">- Smart enough to decide. Human enough to explain why.</span>
             </div>
             <div className="flex flex-wrap items-center gap-5">
               {["Privacy Policy", "Terms of Service", "Security"].map((link) => (
                 <Link key={link} href="#" className="text-xs text-slate-600 transition-all hover:text-slate-400">{link}</Link>
               ))}
-              <span className="text-xs text-slate-600">Copyright 2026 ClaimHeart. All rights reserved.</span>
+              <span className="text-xs text-slate-600">Copyright 2026 NoLoop. All rights reserved.</span>
             </div>
           </div>
         </div>

@@ -4,14 +4,10 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getDashboardPath, signupUser, signupWithGoogle, type SignupPayload } from "@/lib/api/auth";
-import AuthProviderButtons, {
-  AUTH_PROVIDER_LABELS,
-  type AuthProvider,
-} from "@/components/pages/AuthProviderButtons";
+import { getDashboardPath, signupUser, type SignupPayload } from "@/lib/api/auth";
 import AuthShowcase from "@/components/pages/AuthShowcase";
 import { AUTH_ROLE_META } from "@/components/pages/authMeta";
-import ClaimHeartLogo from "@/components/ui/ClaimHeartLogo";
+import NoLoopLogo from "@/components/ui/NoLoopLogo";
 import type { UserRole } from "@/types";
 import { toast } from "sonner";
 
@@ -110,7 +106,6 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
   const activeStep = useMemo(() => stepMeta[role][stepIndex], [role, stepIndex]);
 
@@ -291,29 +286,6 @@ export default function SignupPage() {
     };
   };
 
-  const handleSocialSignup = async (provider: AuthProvider) => {
-    if (provider !== "google") {
-      toast.info(`${AUTH_PROVIDER_LABELS[provider]} signup is not wired in this build yet.`);
-      return;
-    }
-
-    if (isGoogleSubmitting || isSubmitting) {
-      return;
-    }
-
-    setIsGoogleSubmitting(true);
-
-    try {
-      const user = await signupWithGoogle(buildSignupPayload());
-      toast.success(`${AUTH_ROLE_META[user.role].label} account is ready. You can complete more workspace details later in Settings.`);
-      router.push(getDashboardPath(user.role));
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to create the account with Google right now.");
-    } finally {
-      setIsGoogleSubmitting(false);
-    }
-  };
-
   const handleSignup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -349,11 +321,11 @@ export default function SignupPage() {
             <div className="mx-auto flex w-full max-w-xl flex-col justify-center xl:h-full xl:min-h-0">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--ch-blue-border)] bg-[var(--ch-blue-light)] p-1">
-                  <ClaimHeartLogo className="h-full w-full" imageClassName="scale-110" />
+                  <NoLoopLogo className="h-full w-full" imageClassName="scale-110" />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--ch-blue-dark)]">
-                    ClaimHeart Signup
+                    NoLoop Signup
                   </p>
                   <h2 className="text-[1.55rem] font-bold tracking-[-0.04em] text-slate-900 sm:text-[1.75rem]">
                     Create account
@@ -362,27 +334,6 @@ export default function SignupPage() {
               </div>
 
               <div className="mt-3 rounded-[1.5rem] border border-slate-200/80 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-4 shadow-[0_14px_34px_rgba(15,23,42,0.06)] sm:p-5 xl:flex xl:min-h-0 xl:flex-col">
-                {stepIndex === 0 ? (
-                  <div className="space-y-2.5">
-                    <AuthProviderButtons
-                      mode="signup"
-                      onSelect={(provider) => {
-                        void handleSocialSignup(provider);
-                      }}
-                      providers={["google"]}
-                      variant="full"
-                      showLabel={false}
-                    />
-                    <div className="flex items-center gap-3">
-                      <div className="h-px flex-1 bg-slate-200" />
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                        or sign up with email
-                      </span>
-                      <div className="h-px flex-1 bg-slate-200" />
-                    </div>
-                  </div>
-                ) : null}
-
                 <form onSubmit={handleSignup} className="mt-3 space-y-3 xl:flex-1">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--ch-blue-dark)]">
@@ -608,7 +559,7 @@ export default function SignupPage() {
 
                     <button
                       type="submit"
-                      disabled={isSubmitting || isGoogleSubmitting}
+                      disabled={isSubmitting}
                       className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[var(--ch-blue)] px-5 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(74,142,219,0.18)] transition-all hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-55"
                     >
                       {stepIndex === 1 ? (isSubmitting ? "Creating..." : "Create account") : "Next"}

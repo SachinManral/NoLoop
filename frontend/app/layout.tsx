@@ -1,9 +1,9 @@
-﻿import AppBootstrap from "@/components/app/AppBootstrap";
+import AppBootstrap from "@/components/app/AppBootstrap";
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "ClaimHeart - AI-Powered Healthcare Claims",
+  title: "NoLoop - AI-Powered Healthcare Claims",
   description: "Smart enough to decide. Human enough to explain why.",
   manifest: "/site.webmanifest",
   icons: {
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
   },
   openGraph: {
-    title: "ClaimHeart",
+    title: "NoLoop",
     description: "AI claims orchestration. Explainable by design.",
-    siteName: "ClaimHeart",
+    siteName: "NoLoop",
   },
 };
 

@@ -19,7 +19,7 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-[-0.04em] text-slate-900 md:text-[2.1rem]">Settings</h1>
-        <p className="mt-2 text-base text-[var(--ch-muted)] md:text-lg">Configure ClaimHeart AI agents, notifications, and compliance settings</p>
+        <p className="mt-2 text-base text-[var(--ch-muted)] md:text-lg">Configure NoLoop AI agents, notifications, and compliance settings</p>
       </div>
 
       <article className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_8px_24px_rgba(15,23,42,0.04)]">

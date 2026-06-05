@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Activity, ArrowUpRight } from "lucide-react";
-import ClaimHeartLogo from "@/components/ui/ClaimHeartLogo";
+import NoLoopLogo from "@/components/ui/NoLoopLogo";
 import { AUTH_IMAGE_SET, AUTH_ROLE_META } from "@/components/pages/authMeta";
 import type { UserRole } from "@/types";
 
@@ -19,13 +19,13 @@ const SCREEN_COPY = {
     badge: "Secure access",
     title: "Sign in to the right claims workspace.",
     description: "Patients, hospitals, and insurers enter the same platform with the context that matches their role.",
-    ribbon: "ClaimHeart auth",
+    ribbon: "NoLoop auth",
   },
   signup: {
     badge: "Fast onboarding",
     title: "Create an account and start using the system quickly.",
     description: "Keep signup short, collect the essentials, and move the rest into profile completion later.",
-    ribbon: "ClaimHeart signup",
+    ribbon: "NoLoop signup",
   },
 } as const;
 
@@ -62,11 +62,10 @@ export default function AuthShowcase({ mode, role, className = "" }: AuthShowcas
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 p-1 backdrop-blur">
-                <ClaimHeartLogo className="h-full w-full" imageClassName="scale-110" priority={mode === "login"} />
+                <NoLoopLogo className="h-full w-full" imageClassName="scale-110" priority={mode === "login"} />
               </div>
               <div>
-                <p className="text-[17px] font-bold tracking-[-0.04em] text-white">ClaimHeart</p>
-                <p className="text-[12px] text-white/65">Claims platform</p>
+                <p className="text-[17px] font-bold tracking-[-0.04em] text-white">NoLoop</p>
               </div>
             </div>
 

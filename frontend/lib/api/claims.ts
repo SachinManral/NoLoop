@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useAppStore } from "@/store/useAppStore";
 import { getDemoCaseById } from "@/lib/demoWorkflow";
@@ -28,7 +28,7 @@ const resolvePatientEmail = (claim: Claim) => {
     return getDemoCaseById(claim.workflowCaseId).patient.email;
   }
 
-  return "patient@claimheart.ai";
+  return "patient@noloop.ai";
 };
 
 export const buildNewClaim = (data: Partial<Claim>): Claim => {
@@ -71,7 +71,7 @@ export const buildDecisionLetter = (claim: Claim): string => {
 
   const flags = collectClaimFlags(claim).join("\n");
 
-  return `Dear ${claim.patientName},\n\nYour claim ${claim.id} for Rs ${Number(claim.amount).toLocaleString("en-IN")} at ${claim.hospital} has been ${claim.status === "under_review" ? "placed under review" : claim.status}.\n\n${flags ? `Notes:\n${flags}\n\n` : ""}Contact your insurer for queries.\n\nRegards,\nClaimHeart Adjudication System`;
+  return `Dear ${claim.patientName},\n\nYour claim ${claim.id} for Rs ${Number(claim.amount).toLocaleString("en-IN")} at ${claim.hospital} has been ${claim.status === "under_review" ? "placed under review" : claim.status}.\n\n${flags ? `Notes:\n${flags}\n\n` : ""}Contact your insurer for queries.\n\nRegards,\nNoLoop Adjudication System`;
 };
 
 export const buildDecisionEmail = (claim: Claim): ClaimEmail => {
@@ -99,7 +99,7 @@ export const buildDecisionEmail = (claim: Claim): ClaimEmail => {
     "If you would like to challenge this outcome, please reply with any supporting records or continuity documents.",
     "",
     "Regards,",
-    "ClaimHeart Adjudication Desk",
+    "NoLoop Adjudication Desk",
   ].join("\n");
 
   return {

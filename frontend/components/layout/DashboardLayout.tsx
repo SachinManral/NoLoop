@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  BarChart3,
+  Bed,
   Bell,
   BookOpen,
   ChevronsLeft,
@@ -17,6 +17,7 @@ import {
   Menu,
   Search,
   Settings,
+  ShieldCheck,
   User,
   X,
 } from "lucide-react";
@@ -26,7 +27,7 @@ import { getActiveDemoCaseId, getDefaultDemoCaseId, resolveViewerForRole, type D
 import LiveBadge from "@/components/ui/LiveBadge";
 import NotifBell from "@/components/ui/NotifBell";
 import PageTransition from "@/components/ui/PageTransition";
-import ClaimHeartLogo from "@/components/ui/ClaimHeartLogo";
+import NoLoopLogo from "@/components/ui/NoLoopLogo";
 import type { AppUser, UserRole } from "@/types";
 
 type HeaderSearchTarget = {
@@ -37,17 +38,17 @@ type HeaderSearchTarget = {
 
 const NAV_ITEMS: Record<UserRole, { label: string; href: string; icon: typeof LayoutDashboard }[]> = {
   insurer: [
-    { label: "Command Center", href: "/dashboard/insurer", icon: LayoutDashboard },
-    { label: "Claims Queue", href: "/claims", icon: FileText },
-    { label: "Notifications", href: "/dashboard/insurer/notifications", icon: Bell },
-    { label: "Policy Library", href: "/policies", icon: BookOpen },
-    { label: "Reports", href: "/reports", icon: BarChart3 },
-    { label: "Settings", href: "/settings", icon: Settings },
+    { label: "Dashboard", href: "/dashboard/insurer#dashboard", icon: LayoutDashboard },
+    { label: "Review Queue", href: "/dashboard/insurer#review-queue", icon: FileText },
+    { label: "Claim Workspace", href: "/dashboard/insurer#claim-workspace", icon: BookOpen },
+    { label: "Decision Center", href: "/dashboard/insurer#decision-center", icon: ShieldCheck },
   ],
   hospital: [
-    { label: "Dashboard", href: "/dashboard/hospital", icon: LayoutDashboard },
-    { label: "Notifications", href: "/dashboard/hospital/notifications", icon: Bell },
-    { label: "Settings", href: "/settings", icon: Settings },
+    { label: "Dashboard", href: "/dashboard/hospital#dashboard", icon: LayoutDashboard },
+    { label: "Create Claim", href: "/dashboard/hospital#create-claim", icon: FileText },
+    { label: "Active Claims", href: "/dashboard/hospital#active-claims", icon: BookOpen },
+    { label: "Pending Actions", href: "/dashboard/hospital#pending-actions", icon: Bell },
+    { label: "Discharge Desk", href: "/dashboard/hospital#discharge-desk", icon: Bed },
   ],
   patient: [
     { label: "Dashboard", href: "/dashboard/patient", icon: LayoutDashboard },
@@ -91,10 +92,10 @@ function SidebarContent({
     <>
       <div className={`flex h-[64px] items-center border-b border-white/10 ${collapsed ? "justify-center px-3" : "gap-3 px-4"}`}>
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f7fbff] p-0.5">
-          <ClaimHeartLogo className="h-full w-full" imageClassName="scale-105" />
+          <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
         </div>
         <div className={`overflow-hidden transition-all duration-200 ${collapsed ? "w-0 opacity-0" : "w-auto opacity-100"}`}>
-          <p className="whitespace-nowrap text-[1.05rem] font-bold tracking-[-0.03em] text-white">ClaimHeart</p>
+          <p className="whitespace-nowrap text-[1.05rem] font-bold tracking-[-0.03em] text-white">NoLoop</p>
           <p className="whitespace-nowrap text-[11px] text-white/65 capitalize">{role} workspace</p>
         </div>
       </div>
@@ -179,19 +180,22 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const navItems = useMemo(() => NAV_ITEMS[role], [role]);
   const viewer = useMemo(() => resolveViewerForRole(role, user, activeCaseId), [activeCaseId, role, user]);
   const activeNavHref = useMemo(() => {
-    const matches = navItems.filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+    const matches = navItems.filter((item) => {
+      const itemPath = item.href.split("#")[0];
+      return pathname === itemPath || pathname.startsWith(`${itemPath}/`);
+    });
     if (matches.length === 0) {
       return null;
     }
 
     return matches.sort((left, right) => right.href.length - left.href.length)[0]?.href ?? null;
   }, [navItems, pathname]);
-  const pageTitle = navItems.find((item) => item.href === activeNavHref)?.label ?? "ClaimHeart";
+  const pageTitle = navItems.find((item) => item.href === activeNavHref)?.label ?? "NoLoop";
   const roleMeta = ROLE_META[role];
   const desktopSidebarWidth = collapsed ? "lg:pl-[4.5rem]" : "lg:pl-[15rem]";
   const sidebarWidth = collapsed ? "w-[4.5rem]" : "w-[15rem]";
   const togglePosition = collapsed ? "left-[4.5rem]" : "left-[15rem]";
-  const primaryActionHref = role === "insurer" ? "/claims" : `/dashboard/${role}`;
+  const primaryActionHref = role === "insurer" ? "/dashboard/insurer#review-queue" : `/dashboard/${role}`;
   const searchPlaceholder =
     role === "insurer" ? "Search claims, policies..." : role === "hospital" ? "Search claims, documents..." : "Search claims, letters...";
   const headerSearchItems = useMemo<HeaderSearchTarget[]>(() => {
@@ -203,14 +207,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
     const schemaTargets: Record<UserRole, HeaderSearchTarget[]> = {
       insurer: [
-        { label: "Claims queue", href: "/claims", hint: "Review active claim decisions" },
-        { label: "Policy rules", href: "/policies", hint: "Disease caps, waiting periods, and clause review" },
-        { label: "Fraud review", href: "/reports", hint: "Fraud flags, anomalies, and investigator outputs" },
+        { label: "Review Queue", href: "/dashboard/insurer#review-queue", hint: "Claims waiting for review" },
+        { label: "Claim Workspace", href: "/dashboard/insurer#claim-workspace", hint: "Evidence, documents, and verification" },
+        { label: "Decision Center", href: "/dashboard/insurer#decision-center", hint: "Approve or raise clarifications" },
       ],
       hospital: [
-        { label: "Submit claim", href: "/dashboard/hospital", hint: "Upload documents and prepare handoff" },
-        { label: "Document readiness", href: "/dashboard/hospital", hint: "Check OCR package and missing files" },
-        { label: "Notifications", href: "/dashboard/hospital/notifications", hint: "Insurer responses and follow-ups" },
+        { label: "Create Claim", href: "/dashboard/hospital#create-claim", hint: "Add patient, insurance, treatment, and documents" },
+        { label: "Active Claims", href: "/dashboard/hospital#active-claims", hint: "Track submitted claim cards" },
+        { label: "Pending Actions", href: "/dashboard/hospital#pending-actions", hint: "Respond to insurer clarifications" },
       ],
       patient: [
         { label: "My claims", href: "/dashboard/patient", hint: "Track status, letters, and coverage" },
@@ -268,10 +272,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <div className="flex h-[64px] items-center justify-between border-b border-white/10 px-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f7fbff] p-0.5">
-                  <ClaimHeartLogo className="h-full w-full" imageClassName="scale-105" />
+                  <NoLoopLogo className="h-full w-full" imageClassName="scale-105" />
                 </div>
                 <div>
-                  <p className="whitespace-nowrap text-[1.05rem] font-bold tracking-[-0.03em] text-white">ClaimHeart</p>
+                  <p className="whitespace-nowrap text-[1.05rem] font-bold tracking-[-0.03em] text-white">NoLoop</p>
                   <p className="whitespace-nowrap text-[11px] text-white/65">Transparency Platform</p>
                 </div>
               </div>
@@ -397,7 +401,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 <div className="hidden sm:block"><LiveBadge /></div>
                 <NotifBell role={role} user={viewer} />
                 <Link href={primaryActionHref} className="inline-flex h-11 items-center rounded-2xl bg-[var(--ch-blue)] px-4 text-[14px] font-semibold text-white shadow-[0_10px_24px_rgba(74,142,219,0.18)] transition-all hover:opacity-95">
-                  {role === "insurer" ? "Open Queue" : role === "hospital" ? "Submit Claim" : "My Claims"}
+                  {role === "insurer" ? "Review Queue" : role === "hospital" ? "Create Claim" : "My Claims"}
                 </Link>
               </div>
             </div>
